@@ -4,6 +4,7 @@ import {
   Avatar,
   Box,
   Button,
+  Collapse,
   IconButton,
   Menu,
   MenuItem,
@@ -14,45 +15,37 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openMenu = Boolean(anchorEl);
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
+  const [checked, setChecked] = React.useState(false);
+  const handleClick = () => {
+    setChecked((prev) => !prev);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleClose = () => {
+  //   setAnchorEl(null);
+  // };
 
   return (
     <>
       <AppBar>
         <Toolbar sx={{ ml: "auto" }}>
           <IconButton
+            sx={{ position: "relative" }}
             size="large"
-            aria-label="more"
-            aria-controls={"notification-menu"}
-            aria-expanded={openMenu ? "true" : undefined}
-            aria-haspopup="true"
             onClick={handleClick}
           >
             <NotificationsIcon />
           </IconButton>
-          <Menu
-            id="notification-menu"
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
+          <Collapse
+            sx={{ position: "absolute", right: "10px", top: "90%" }}
+            in={checked}
           >
-            <Box width={360} height={"calc(90vh - 16px)"} pl="16px" pr="16px">
+            <Box
+              width={360}
+              borderRadius="8px"
+              height={"calc(90vh - 16px)"}
+              p="16px"
+              sx={{ backgroundColor: "#242526", overflowY: "scroll" }}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -67,7 +60,7 @@ const Navbar = () => {
                   Notification
                 </Typography>
                 <IconButton>
-                  <MoreHorizIcon />
+                  <MoreHorizIcon sx={{ size: "large", color: "white" }} />
                 </IconButton>
               </Box>
               <Box>
@@ -103,7 +96,7 @@ const Navbar = () => {
                 <All></All>
               </Box>
             </Box>
-          </Menu>
+          </Collapse>
         </Toolbar>
       </AppBar>
     </>
@@ -133,7 +126,9 @@ function All() {
 function NotificationItem({ data }) {
   return (
     <div>
-      <Typography sx={{ fontSize: "17px", fontWeight: "700" }}>New</Typography>
+      <Typography sx={{ fontSize: "17px", fontWeight: "700", pt: "10px" }}>
+        New
+      </Typography>
       {[...data].map((item, index) => (
         <Box
           key={index}
@@ -143,10 +138,10 @@ function NotificationItem({ data }) {
             alignItems: "center",
             gap: "20px",
             padding: "8px",
-            borderRadius: "4px",
+            borderRadius: "10px",
             cursor: "pointer",
             "&:hover": {
-              backgroundColor: "rgba(0,0,0,0.1)",
+              backgroundColor: "rgba(255,255,255,0.1)",
             },
           }}
         >
@@ -163,7 +158,7 @@ function NotificationItem({ data }) {
         </Box>
       ))}
     </div>
-  );npm 
+  );
 }
 
 export default Navbar;
