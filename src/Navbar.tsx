@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import All from "./All";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
+  Avatar,
   Box,
   Button,
   IconButton,
@@ -99,6 +99,7 @@ const Navbar = () => {
                 </Button>
               </Box>
               <Box>
+                {/* All() */}
                 <All></All>
               </Box>
             </Box>
@@ -108,5 +109,61 @@ const Navbar = () => {
     </>
   );
 };
+
+function All() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      "https://tunacoding.com/api/articles?&relations[]=user&relations[]=tags&page=1&title=&tag_ids[]=&=&=&excluded_tag_ids[]=&=&=&order_by=&=&order_by_direction=desc&=Gi%E1%BA%A3m%20d%E1%BA%A7n"
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data.items);
+      });
+  }, []);
+  return (
+    <Box component="div">
+      {/* Notification() */}
+      <NotificationItem data={data}></NotificationItem>
+    </Box>
+  );
+}
+
+function NotificationItem({ data }) {
+  return (
+    <div>
+      <Typography sx={{ fontSize: "17px", fontWeight: "700" }}>New</Typography>
+      {[...data].map((item, index) => (
+        <Box
+          key={index}
+          py="12px"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            padding: "8px",
+            borderRadius: "4px",
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: "rgba(0,0,0,0.1)",
+            },
+          }}
+        >
+          <Avatar
+            alt="Avatar"
+            src={item.thumbnail}
+            sx={{ width: 56, height: 56 }}
+          />
+          <Typography className="limit-line" sx={{ fontSize: "15px" }}>
+            {item.title} Bạn đang có ý tưởng xây dựng thương hiệu? Bạn đang có ý
+            tưởng xây dựng thương hiệu? Bạn đang có ý tưởng xây dựng thương
+            hiệu? Bạn đang có ý tưởng xây dựng thương hiệu?
+          </Typography>
+        </Box>
+      ))}
+    </div>
+  );npm 
+}
 
 export default Navbar;
