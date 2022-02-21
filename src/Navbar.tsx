@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AppBar,
   Avatar,
@@ -14,8 +14,25 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [checked, setChecked] = React.useState(false);
+
+  const ref = useRef(null);
+
+  const { onClickOutside } = props;
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (checked && ref.current && !ref.current.contain(e.target)) {
+        onClickOutside && onClickOutside();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside, true);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside, true);
+    };
+  }, [onClickOutside]);
+
   const handleClick = () => {
     setChecked((prev) => !prev);
   };
@@ -150,11 +167,16 @@ function NotificationItem({ data }) {
             src={item.thumbnail}
             sx={{ width: 56, height: 56 }}
           />
-          <Typography className="limit-line" sx={{ fontSize: "15px" }}>
-            {item.title} Bạn đang có ý tưởng xây dựng thương hiệu? Bạn đang có ý
-            tưởng xây dựng thương hiệu? Bạn đang có ý tưởng xây dựng thương
-            hiệu? Bạn đang có ý tưởng xây dựng thương hiệu?
-          </Typography>
+          <Box>
+            <Typography className="limit-line" sx={{ fontSize: "15px" }}>
+              {item.title} Bạn đang có ý tưởng xây dựng thương hiệu? Bạn đang có
+              ý tưởng xây dựng thương hiệu? Bạn đang có ý tưởng xây dựng thương
+              hiệu? Bạn đang có ý tưởng xây dựng thương hiệu?
+            </Typography>
+            <Typography sx={{ textTransform: "lowercase" }}>
+              Khoảng một phút trước
+            </Typography>
+          </Box>
         </Box>
       ))}
     </div>
